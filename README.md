@@ -1,35 +1,19 @@
-# AutoGuardian GPS Pro — Debug Android
+# AutoGuardianGPS-Pro
 
-Progetto Android pronto per compilazione automatica con GitHub Actions.
+Progetto Android compilabile automaticamente con GitHub Actions.
 
-## Caricamento corretto su GitHub
+## Metodo semplice
+1. Crea su GitHub un repository pubblico chiamato `AutoGuardianGPS-Pro`.
+2. Carica TUTTI i file e le cartelle contenuti nello ZIP.
+3. Esegui il commit.
+4. Apri la scheda **Actions**.
+5. Apri **Build AutoGuardian GPS Pro APK**.
+6. Attendi il completamento con spunta verde.
+7. Apri l'esecuzione completata.
+8. In basso, nella sezione **Artifacts**, scarica `AutoGuardianGPS-Pro-debug`.
+9. Estrai lo ZIP dell'artifact: dentro trovi `AutoGuardianGPS-Pro-debug.apk`.
 
-Dopo l'upload, nella pagina principale del repository devono comparire direttamente:
+## Nota importante
+Questa versione base è realmente compilabile e mostra la posizione corrente del telefono dopo aver concesso il permesso GPS.
 
-- `.github/`
-- `app/`
-- `build.gradle.kts`
-- `settings.gradle.kts`
-- `gradle.properties`
-
-**Non** deve esserci una cartella esterna `AutoGuardianGPS-Pro/` che racchiude questi file.
-
-Il workflow `.github/workflows/build-debug.yml` installa Java 17, Android SDK 35 e Gradle 8.10.2, quindi non richiede il Gradle Wrapper nel repository.
-
-## Download APK
-
-Dopo il commit:
-
-1. apri **Actions** e controlla `Build AutoGuardian Debug APK`;
-2. quando il job è verde, apri **Releases**;
-3. scarica `AutoGuardianGPS-Pro-debug.apk`.
-
-## Funzioni della build Debug
-
-- tracking GPS tramite foreground service;
-- aggiornamento posizione circa ogni 15 secondi;
-- ultima posizione salvata localmente;
-- attivazione/disattivazione manuale;
-- tentativo di riavvio del servizio dopo il boot se il tracking era attivo.
-
-Questa prima build serve a verificare installazione e tracking sul dispositivo. Usare solo su veicoli propri o con autorizzazione.
+Le funzioni avanzate (geofence, rilevamento movimento, notifiche remote e posizione live da un secondo telefono) richiedono configurazione aggiuntiva e un backend/servizio di messaggistica.
