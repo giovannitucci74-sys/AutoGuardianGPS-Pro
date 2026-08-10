@@ -1,0 +1,18 @@
+AUTOGUARDIAN GPS PRO — VERSIONE CORRETTA PER GITHUB
+
+IMPORTANTE: nel repository GitHub, settings.gradle.kts deve vedersi subito nella pagina principale.
+NON deve esserci una cartella AutoGuardianGPS-Pro che contiene tutto il progetto.
+
+PROCEDURA:
+1) Apri il repository GitHub AutoGuardianGPS-Pro.
+2) Se ci sono file/cartelle della prova precedente, puoi sostituirli con quelli di questo ZIP.
+3) Estrai lo ZIP.
+4) Add file > Upload files.
+5) Carica TUTTI i file e le cartelle estratti, compresa la cartella nascosta .github.
+6) Commit changes.
+7) Apri Actions: partirà "Build AutoGuardian Debug APK".
+8) Quando diventa verde, apri Releases.
+9) Scarica AutoGuardianGPS-Pro-debug.apk.
+
+Il workflow installa da solo Java 17, Android SDK 35 e Gradle 8.10.2.
+Non serve Android Studio e non serve creare manualmente gradlew.
