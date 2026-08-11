@@ -1,33 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center"
-    android:padding="28dp">
-
-    <TextView
-        android:id="@+id/titleText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="AutoGuardian GPS Pro"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="24dp" />
-
-    <TextView
-        android:id="@+id/statusText"
+    android:layout_height="match_parent">
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Pronto"
-        android:textSize="18sp"
-        android:gravity="center"
-        android:layout_marginBottom="24dp" />
-
-    <Button
-        android:id="@+id/locationButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Mostra posizione attuale" />
-
-</LinearLayout>
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:padding="28dp">
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="AutoGuardian GPS Pro" android:textSize="28sp" android:textStyle="bold"
+            android:layout_marginTop="42dp" android:layout_marginBottom="12dp" />
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Scegli il ruolo di questo telefono" android:textSize="17sp"
+            android:layout_marginBottom="24dp" />
+        <Button android:id="@+id/trackerModeButton" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="TRACKER AUTO" />
+        <Button android:id="@+id/controlModeButton" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="TELEFONO DI CONTROLLO"
+            android:layout_marginTop="10dp" />
+        <TextView android:id="@+id/modeText" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="Modalità non selezionata"
+            android:textStyle="bold" android:textSize="18sp" android:gravity="center"
+            android:layout_marginTop="28dp" />
+        <TextView android:id="@+id/statusText" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="Pronto" android:textSize="18sp"
+            android:gravity="center" android:padding="8dp" android:layout_marginTop="10dp" />
+        <Button android:id="@+id/startButton" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="ATTIVA TRACKER"
+            android:visibility="gone" android:layout_marginTop="20dp" />
+        <Button android:id="@+id/stopButton" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="DISATTIVA TRACKER"
+            android:visibility="gone" android:layout_marginTop="8dp" />
+        <Button android:id="@+id/mapButton" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="APRI POSIZIONE AUTO SULLA MAPPA"
+            android:visibility="gone" android:layout_marginTop="20dp" />
+    </LinearLayout>
+</ScrollView>
