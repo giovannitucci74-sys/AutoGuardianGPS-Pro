@@ -1,4 +1,4 @@
-name: Build AutoGuardian Debug APK
+name: CREA APK - VERSIONE CORRETTA
 
 on:
   workflow_dispatch:
@@ -11,9 +11,8 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Set up Java 17
@@ -25,35 +24,23 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install Android SDK 35
-        run: |
-          yes | sdkmanager --licenses >/dev/null || true
-          sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
-
-      - name: Set up Gradle 8.10.2
+      # Usa Gradle installato dall'azione: non richiede gradlew o il wrapper.
+      - name: Configura Gradle 8.10
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: "8.10.2"
+          gradle-version: "8.10"
 
-      - name: Verify project files
-        run: |
-          test -f settings.gradle.kts
-          test -f build.gradle.kts
-          test -f app/build.gradle.kts
-          test -f app/src/main/AndroidManifest.xml
-
-      - name: Build Debug APK
+      - name: Compila APK Debug
         run: gradle :app:assembleDebug --no-daemon --stacktrace
 
       - name: Prepare APK
         run: cp app/build/outputs/apk/debug/app-debug.apk AutoGuardianGPS-Pro-debug.apk
 
-      - name: Upload APK artifact
+      - name: Upload build artifact
         uses: actions/upload-artifact@v4
         with:
           name: AutoGuardianGPS-Pro-debug
           path: AutoGuardianGPS-Pro-debug.apk
-          if-no-files-found: error
 
       - name: Publish automatic GitHub Release
         uses: softprops/action-gh-release@v2
