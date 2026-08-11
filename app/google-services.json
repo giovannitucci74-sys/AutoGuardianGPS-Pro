@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "346207446589",
+    "project_id": "autoguardiangps",
+    "storage_bucket": "autoguardiangps.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:346207446589:android:95b7be556a24dd7431ec54",
+        "android_client_info": {
+          "package_name": "com.autoguardian.gpspro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQpBZuv9Q0qbnM8879HsEOLzRdBB_nutE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
