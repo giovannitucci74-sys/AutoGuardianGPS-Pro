@@ -20,14 +20,13 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Configura Gradle
+      - name: Configura Gradle 8.10
         uses: gradle/actions/setup-gradle@v4
-
-      - name: Rendi eseguibile Gradle
-        run: chmod +x gradlew
+        with:
+          gradle-version: '8.10'
 
       - name: Compila APK Debug
-        run: ./gradlew assembleDebug
+        run: gradle :app:assembleDebug --no-daemon --stacktrace
 
       - name: Carica APK
         uses: actions/upload-artifact@v4
