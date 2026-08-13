@@ -32,8 +32,15 @@
         <Button android:id="@+id/stopButton" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:text="DISATTIVA TRACKER"
             android:visibility="gone" android:layout_marginTop="8dp" />
+        <WebView
+            android:id="@+id/liveMap"
+            android:layout_width="match_parent"
+            android:layout_height="360dp"
+            android:visibility="gone"
+            android:layout_marginTop="16dp"
+            android:contentDescription="Mappa posizione auto aggiornata automaticamente" />
         <Button android:id="@+id/mapButton" android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:text="APRI POSIZIONE AUTO SULLA MAPPA"
-            android:visibility="gone" android:layout_marginTop="20dp" />
+            android:layout_height="wrap_content" android:text="APRI ANCHE IN GOOGLE MAPS"
+            android:visibility="gone" android:layout_marginTop="12dp" />
     </LinearLayout>
 </ScrollView>

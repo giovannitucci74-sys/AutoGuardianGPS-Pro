@@ -7,6 +7,8 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +19,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import java.text.DateFormat
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -28,6 +31,8 @@ class MainActivity : AppCompatActivity() {
     private var latitude: Double? = null
     private var longitude: Double? = null
     private var listener: ValueEventListener? = null
+    private var lastMapLatitude: Double? = null
+    private var lastMapLongitude: Double? = null
 
     private val permissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
@@ -41,15 +46,24 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        configureMap()
         binding.trackerModeButton.setOnClickListener { selectTrackerMode() }
         binding.controlModeButton.setOnClickListener { selectControlMode() }
         binding.startButton.setOnClickListener { ensurePermissionsAndStart() }
         binding.stopButton.setOnClickListener { stopTracker() }
-        binding.mapButton.setOnClickListener { openMap() }
+        binding.mapButton.setOnClickListener { openExternalMap() }
         when (prefs.getString("mode", null)) {
             "tracker" -> selectTrackerMode()
             "control" -> selectControlMode()
         }
+    }
+
+    private fun configureMap() {
+        binding.liveMap.webViewClient = WebViewClient()
+        binding.liveMap.settings.javaScriptEnabled = false
+        binding.liveMap.settings.setSupportZoom(true)
+        binding.liveMap.settings.builtInZoomControls = true
+        binding.liveMap.settings.displayZoomControls = false
     }
 
     private fun selectTrackerMode() {
@@ -61,6 +75,7 @@ class MainActivity : AppCompatActivity() {
         else "Premi ATTIVA TRACKER e lascia questo telefono nell’auto."
         binding.startButton.visibility = View.VISIBLE
         binding.stopButton.visibility = View.VISIBLE
+        binding.liveMap.visibility = View.GONE
         binding.mapButton.visibility = View.GONE
     }
 
@@ -70,6 +85,7 @@ class MainActivity : AppCompatActivity() {
         binding.statusText.text = "Connessione alla posizione dell’auto..."
         binding.startButton.visibility = View.GONE
         binding.stopButton.visibility = View.GONE
+        binding.liveMap.visibility = View.VISIBLE
         binding.mapButton.visibility = View.VISIBLE
         listenForCar()
     }
@@ -108,15 +124,19 @@ class MainActivity : AppCompatActivity() {
                 latitude = snapshot.child("latitude").getValue(Double::class.java)
                 longitude = snapshot.child("longitude").getValue(Double::class.java)
                 val time = snapshot.child("timestamp").getValue(Long::class.java)
-                if (latitude != null && longitude != null) {
+                val lat = latitude
+                val lon = longitude
+                if (lat != null && lon != null) {
                     val formattedTime = time?.let {
                         DateFormat.getDateTimeInstance().format(it)
                     } ?: "-"
                     binding.statusText.text =
                         "Auto localizzata\nLatitudine: %.6f\nLongitudine: %.6f\nAggiornamento: %s"
-                            .format(latitude, longitude, formattedTime)
+                            .format(lat, lon, formattedTime)
+                    updateLiveMap(lat, lon)
                 } else binding.statusText.text = "In attesa della prima posizione dell’auto."
             }
+
             override fun onCancelled(error: DatabaseError) {
                 binding.statusText.text = "Firebase: " + error.message
             }
@@ -124,14 +144,33 @@ class MainActivity : AppCompatActivity() {
         locationRef.addValueEventListener(listener!!)
     }
 
-    private fun openMap() {
+    private fun updateLiveMap(lat: Double, lon: Double) {
+        if (lat == lastMapLatitude && lon == lastMapLongitude) return
+        lastMapLatitude = lat
+        lastMapLongitude = lon
+        val delta = 0.003
+        val left = formatCoordinate(lon - delta)
+        val bottom = formatCoordinate(lat - delta)
+        val right = formatCoordinate(lon + delta)
+        val top = formatCoordinate(lat + delta)
+        val markerLat = formatCoordinate(lat)
+        val markerLon = formatCoordinate(lon)
+        val url = "https://www.openstreetmap.org/export/embed.html" +
+            "?bbox=$left%2C$bottom%2C$right%2C$top&layer=mapnik&marker=$markerLat%2C$markerLon"
+        binding.liveMap.loadUrl(url)
+    }
+
+    private fun formatCoordinate(value: Double): String =
+        String.format(Locale.US, "%.6f", value)
+
+    private fun openExternalMap() {
         val lat = latitude
         val lon = longitude
         if (lat == null || lon == null) {
             Toast.makeText(this, "Posizione auto non ancora disponibile.", Toast.LENGTH_LONG).show()
             return
         }
-        val uri = Uri.parse("geo:" + lat + "," + lon + "?q=" + lat + "," + lon + "(AutoGuardian)")
+        val uri = Uri.parse("geo:$lat,$lon?q=$lat,$lon(AutoGuardian)")
         startActivity(Intent(Intent.ACTION_VIEW, uri))
     }
 
@@ -142,6 +181,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         stopListening()
+        binding.liveMap.apply {
+            stopLoading()
+            webViewClient = WebViewClient()
+            destroy()
+        }
         super.onDestroy()
     }
 }
