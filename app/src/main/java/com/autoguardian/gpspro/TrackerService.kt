@@ -3,8 +3,10 @@ package com.autoguardian.gpspro
 import android.Manifest
 import android.app.*
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.location.Location
+import android.os.BatteryManager
 import android.os.Build
 import android.os.IBinder
 import android.os.Looper
@@ -16,11 +18,14 @@ import com.google.firebase.database.FirebaseDatabase
 class TrackerService : Service() {
     private lateinit var client: FusedLocationProviderClient
     private lateinit var callback: LocationCallback
-    private val locationRef by lazy {
+    private val database by lazy {
         FirebaseDatabase.getInstance(
             "https://autoguardiangps-default-rtdb.europe-west1.firebasedatabase.app"
-        ).reference.child("vehicles/default/location")
+        )
     }
+    private val vehicleRef by lazy { database.reference.child("vehicles/default") }
+    private val locationRef by lazy { vehicleRef.child("location") }
+    private val historyRef by lazy { vehicleRef.child("history") }
 
     override fun onCreate() {
         super.onCreate()
@@ -44,13 +49,29 @@ class TrackerService : Service() {
     }
 
     private fun upload(location: Location) {
-        locationRef.setValue(mapOf(
+        val timestamp = System.currentTimeMillis()
+        val payload = mapOf(
             "latitude" to location.latitude,
             "longitude" to location.longitude,
             "accuracy" to location.accuracy.toDouble(),
             "speed" to location.speed.toDouble(),
-            "timestamp" to System.currentTimeMillis()
-        ))
+            "battery" to batteryPercent(),
+            "timestamp" to timestamp
+        )
+        locationRef.setValue(payload)
+        vehicleRef.child("onlineAt").setValue(timestamp)
+        historyRef.child(timestamp.toString()).setValue(payload).addOnSuccessListener {
+            historyRef.orderByKey().limitToLast(201).get().addOnSuccessListener { snapshot ->
+                if (snapshot.childrenCount > 200) snapshot.children.firstOrNull()?.ref?.removeValue()
+            }
+        }
+    }
+
+    private fun batteryPercent(): Int {
+        val status = registerReceiver(null, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+        val level = status?.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) ?: -1
+        val scale = status?.getIntExtra(BatteryManager.EXTRA_SCALE, -1) ?: -1
+        return if (level >= 0 && scale > 0) (level * 100 / scale) else -1
     }
 
     private fun createChannel() {
@@ -69,7 +90,7 @@ class TrackerService : Service() {
         return NotificationCompat.Builder(this, "tracker")
             .setSmallIcon(android.R.drawable.ic_menu_mylocation)
             .setContentTitle("AutoGuardian GPS Pro")
-            .setContentText("Invio posizione dell’auto attivo")
+            .setContentText("Protezione e invio posizione attivi")
             .setContentIntent(pending)
             .setOngoing(true)
             .build()
@@ -78,9 +99,8 @@ class TrackerService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int) = START_STICKY
 
     override fun onDestroy() {
-        if (::client.isInitialized && ::callback.isInitialized) {
-            client.removeLocationUpdates(callback)
-        }
+        if (::client.isInitialized && ::callback.isInitialized) client.removeLocationUpdates(callback)
+        vehicleRef.child("onlineAt").setValue(0)
         super.onDestroy()
     }
 
