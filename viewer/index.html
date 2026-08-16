@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#07111f">
+  <meta name="referrer" content="no-referrer">
+  <title>AutoGuardian Viewer</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    :root{color-scheme:dark;--bg:#07111f;--card:#0e1c2f;--line:#203651;--text:#edf5ff;--muted:#9fb1c7;--ok:#31d07d;--bad:#ff6577;--accent:#41a5ff}
+    *{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#07111f,#0c1b2d);color:var(--text);font:16px system-ui,-apple-system,sans-serif}
+    main{max-width:760px;margin:auto;padding:18px}.top{display:flex;align-items:center;justify-content:space-between;gap:14px}.brand{font-size:1.35rem;font-weight:800}
+    .status{display:inline-flex;align-items:center;gap:7px;color:var(--muted)}.dot{width:11px;height:11px;border-radius:50%;background:var(--bad);box-shadow:0 0 12px currentColor}
+    .dot.online{background:var(--ok)}.card{margin-top:16px;padding:16px;border:1px solid var(--line);border-radius:18px;background:rgba(14,28,47,.92);box-shadow:0 15px 45px #0005}
+    #map{height:56vh;min-height:350px;border-radius:14px;background:#132238}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}
+    .metric{padding:12px;border-radius:13px;background:#0a1728;border:1px solid var(--line)}.metric small{display:block;color:var(--muted);margin-bottom:4px}.metric strong{font-size:1.05rem}
+    .actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}button,a.button{border:0;border-radius:13px;padding:14px;font-weight:750;text-align:center;text-decoration:none;cursor:pointer}
+    button{background:var(--accent);color:#031323}a.button{background:#152a43;color:var(--text);border:1px solid var(--line)}.note{color:var(--muted);font-size:.88rem;line-height:1.4;margin:12px 2px 0}
+    @media(max-width:480px){main{padding:13px}.grid{grid-template-columns:1fr 1fr}#map{height:52vh}}
+  </style>
+</head>
+<body>
+<main>
+  <div class="top"><div class="brand">🚗 AutoGuardian Viewer</div><div class="status"><span id="dot" class="dot"></span><span id="online">In attesa</span></div></div>
+  <section class="card">
+    <div id="map" aria-label="Mappa posizione auto"></div>
+    <div class="grid">
+      <div class="metric"><small>Ultimo aggiornamento</small><strong id="updated">—</strong></div>
+      <div class="metric"><small>Precisione GPS</small><strong id="accuracy">—</strong></div>
+      <div class="metric"><small>Velocità</small><strong id="speed">—</strong></div>
+      <div class="metric"><small>Coordinate</small><strong id="coords">—</strong></div>
+    </div>
+    <div class="actions"><button id="refresh">Aggiorna ora</button><a id="maps" class="button" href="#" target="_blank" rel="noopener">Apri in Maps</a></div>
+    <p class="note" id="message">Il Viewer non usa posizione, microfono, contatti, SMS o servizi in background sul telefono di controllo.</p>
+  </section>
+</main>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const ENDPOINT="https://autoguardiangps-default-rtdb.europe-west1.firebasedatabase.app/vehicles/default/location.json";
+const map=L.map("map",{zoomControl:true}).setView([41.9,12.5],6);
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19,attribution:"&copy; OpenStreetMap"}).addTo(map);
+let marker=null,lastTimestamp=0;
+const el=id=>document.getElementById(id);
+function render(d){
+  const lat=Number(d?.latitude),lon=Number(d?.longitude),ts=Number(d?.timestamp||0);
+  if(!Number.isFinite(lat)||!Number.isFinite(lon))throw new Error("Posizione non ancora disponibile");
+  const fresh=Date.now()-ts<120000;
+  el("dot").classList.toggle("online",fresh);el("online").textContent=fresh?"Online":"Non aggiornato";
+  el("updated").textContent=ts?new Date(ts).toLocaleString("it-IT"):"—";
+  el("accuracy").textContent=Number.isFinite(Number(d.accuracy))?"± "+Math.round(d.accuracy)+" m":"—";
+  el("speed").textContent=Number.isFinite(Number(d.speed))?(Number(d.speed)*3.6).toFixed(1)+" km/h":"—";
+  el("coords").textContent=lat.toFixed(5)+", "+lon.toFixed(5);
+  el("maps").href="https://www.google.com/maps/search/?api=1&query="+lat+","+lon;
+  if(!marker){marker=L.marker([lat,lon]).addTo(map).bindPopup("AutoGuardian");map.setView([lat,lon],17)}
+  else{marker.setLatLng([lat,lon]);if(ts!==lastTimestamp)map.panTo([lat,lon])}
+  lastTimestamp=ts;el("message").textContent="Aggiornamento automatico ogni 10 secondi. Nessun permesso richiesto sul telefono di controllo.";
+}
+async function load(){
+  el("message").textContent="Aggiornamento posizione…";
+  try{const r=await fetch(ENDPOINT,{cache:"no-store"});if(!r.ok)throw new Error("Firebase HTTP "+r.status);render(await r.json())}
+  catch(e){el("dot").classList.remove("online");el("online").textContent="Errore";el("message").textContent="Impossibile leggere la posizione: "+e.message}
+}
+el("refresh").addEventListener("click",load);load();setInterval(load,10000);
+</script>
+</body>
+</html>
