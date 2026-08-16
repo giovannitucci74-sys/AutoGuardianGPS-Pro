@@ -38,7 +38,7 @@
         <Button android:id="@+id/antitheftButton" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:text="ATTIVA / DISATTIVA ANTIFURTO"
             android:visibility="gone" android:layout_marginTop="8dp" />
-        <Button android:id="@+id/historyButton" android:layout_width="match_parent"
+        <Button android:id="@+id/geofenceButton" android:layout_width="match_parent"\n            android:layout_height="wrap_content" android:text="IMPOSTA ZONA SICURA (150 M)"\n            android:visibility="gone" android:layout_marginTop="8dp" />\n        <Button android:id="@+id/historyButton" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:text="CRONOLOGIA PERCORSI"
             android:visibility="gone" android:layout_marginTop="8dp" />
         <Button android:id="@+id/hiddenPhoneButton" android:layout_width="match_parent"
