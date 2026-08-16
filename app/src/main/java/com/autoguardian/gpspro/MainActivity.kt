@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         binding.stopButton.setOnClickListener { stopTracker() }
         binding.positionButton.setOnClickListener { showPosition() }
         binding.mapButton.setOnClickListener { openExternalMap() }
-        binding.antitheftButton.setOnClickListener { toggleAntitheft() }
+        binding.antitheftButton.setOnClickListener { toggleAntitheft() }\n        binding.geofenceButton.setOnClickListener { setSafeZone() }
         binding.historyButton.setOnClickListener { loadHistory() }
         binding.hiddenPhoneButton.setOnClickListener { showHiddenPhoneStatus() }
         when (prefs.getString("mode", null)) {
@@ -167,6 +167,20 @@ class MainActivity : AppCompatActivity() {
             val armed = it.getValue(Boolean::class.java) ?: false
             vehicleRef.child("armed").setValue(!armed)
             Toast.makeText(this, if (!armed) "Antifurto attivato" else "Antifurto disattivato", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun setSafeZone() {
+        val lat = latitude
+        val lon = longitude
+        if (lat == null || lon == null) {
+            Toast.makeText(this, "Attendi prima la posizione dell’auto.", Toast.LENGTH_LONG).show()
+            return
+        }
+        vehicleRef.child("geofence").setValue(
+            mapOf("latitude" to lat, "longitude" to lon, "radiusMeters" to 150.0)
+        ).addOnSuccessListener {
+            Toast.makeText(this, "Zona sicura impostata: raggio 150 metri", Toast.LENGTH_LONG).show()
         }
     }
 
