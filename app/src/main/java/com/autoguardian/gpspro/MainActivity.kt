@@ -40,6 +40,13 @@ class MainActivity : AppCompatActivity() {
             if (granted) startTracker() else binding.statusText.text = "Permesso posizione non concesso."
         }
 
+    private val notificationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (!granted) Toast.makeText(
+                this, "Abilita le notifiche per ricevere gli allarmi.", Toast.LENGTH_LONG
+            ).show()
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -90,6 +97,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun selectControlMode() {
+        if (Build.VERSION.SDK_INT >= 33 &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
+            PackageManager.PERMISSION_GRANTED
+        ) notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
         prefs.edit().putString("mode", "control").apply()
         binding.modeText.text = "MODALITÀ: TELEFONO DI CONTROLLO"
         binding.statusText.text = "Connessione al telefono nascosto..."
