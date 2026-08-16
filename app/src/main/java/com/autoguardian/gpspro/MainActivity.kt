@@ -67,12 +67,14 @@ class MainActivity : AppCompatActivity() {
         val state = if (visible) View.VISIBLE else View.GONE
         binding.positionButton.visibility = state
         binding.antitheftButton.visibility = state
+        binding.geofenceButton.visibility = state
         binding.historyButton.visibility = state
         binding.hiddenPhoneButton.visibility = state
         binding.mapButton.visibility = state
     }
 
     private fun selectTrackerMode() {
+        stopService(Intent(this, ControlAlertService::class.java))
         prefs.edit().putString("mode", "tracker").apply()
         stopListening()
         binding.modeText.text = "MODALITÀ: TELEFONO NASCOSTO"
@@ -95,6 +97,7 @@ class MainActivity : AppCompatActivity() {
         binding.liveMap.visibility = View.VISIBLE
         binding.historyText.visibility = View.GONE
         setControlButtons(true)
+        ContextCompat.startForegroundService(this, Intent(this, ControlAlertService::class.java))
         listenForCar()
     }
 
