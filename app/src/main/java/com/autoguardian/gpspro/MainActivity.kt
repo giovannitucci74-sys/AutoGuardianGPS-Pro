@@ -54,7 +54,8 @@ class MainActivity : AppCompatActivity() {
         binding.stopButton.setOnClickListener { stopTracker() }
         binding.positionButton.setOnClickListener { showPosition() }
         binding.mapButton.setOnClickListener { openExternalMap() }
-        binding.antitheftButton.setOnClickListener { toggleAntitheft() }\n        binding.geofenceButton.setOnClickListener { setSafeZone() }
+        binding.antitheftButton.setOnClickListener { toggleAntitheft() }
+        binding.geofenceButton.setOnClickListener { setSafeZone() }
         binding.historyButton.setOnClickListener { loadHistory() }
         binding.hiddenPhoneButton.setOnClickListener { showHiddenPhoneStatus() }
         when (prefs.getString("mode", null)) {
