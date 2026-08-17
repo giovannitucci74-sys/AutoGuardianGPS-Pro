@@ -54,7 +54,11 @@
         <Button android:id="@+id/mapButton" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:text="APRI ANCHE IN GOOGLE MAPS"
             android:visibility="gone" android:layout_marginTop="12dp" />
-        <Button android:id="@+id/findHubButton" android:layout_width="match_parent"\n            android:layout_height="wrap_content" android:text="LOCALIZZA CON GOOGLE FIND HUB"\n            android:contentDescription="Apri Google Find Hub per localizzare il dispositivo"\n            android:visibility="gone" android:layout_marginTop="8dp" />\n        <TextView android:id="@+id/historyText" android:layout_width="match_parent"
+        <Button android:id="@+id/findHubButton" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="LOCALIZZA CON GOOGLE FIND HUB"
+            android:contentDescription="Apri Google Find Hub per localizzare il dispositivo"
+            android:visibility="gone" android:layout_marginTop="8dp" />
+        <TextView android:id="@+id/historyText" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:text="" android:textSize="14sp"
             android:visibility="gone" android:padding="12dp" android:layout_marginTop="10dp" />
     </LinearLayout>
