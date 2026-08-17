@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
         binding.startButton.setOnClickListener { ensurePermissionsAndStart() }
         binding.stopButton.setOnClickListener { stopTracker() }
         binding.positionButton.setOnClickListener { showPosition() }
-        binding.mapButton.setOnClickListener { openExternalMap() }
+        binding.mapButton.setOnClickListener { openExternalMap() }\n        binding.findHubButton.setOnClickListener { openFindHub() }
         binding.antitheftButton.setOnClickListener { toggleAntitheft() }
         binding.geofenceButton.setOnClickListener { setSafeZone() }
         binding.historyButton.setOnClickListener { loadHistory() }
@@ -248,7 +248,7 @@ class MainActivity : AppCompatActivity() {
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("geo:$lat,$lon?q=$lat,$lon(AutoGuardian)")))
     }
 
-    private fun stopListening() {
+    private fun openFindHub() {\n        val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://android.com/find"))\n        if (intent.resolveActivity(packageManager) != null) {\n            startActivity(intent)\n        } else {\n            Toast.makeText(this, "Nessun browser disponibile.", Toast.LENGTH_LONG).show()\n        }\n    }\n\n    private fun stopListening() {
         listener?.let { locationRef.removeEventListener(it) }
         listener = null
     }
