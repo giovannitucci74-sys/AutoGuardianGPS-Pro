@@ -46,6 +46,7 @@ class MainActivity : AppCompatActivity() {
         binding.startButton.setOnClickListener { ensurePermissionsAndStart() }
         binding.stopButton.setOnClickListener { stopTracker() }
         binding.mapButton.setOnClickListener { openMap() }
+        binding.findHubButton.setOnClickListener { openFindHub() }
         when (prefs.getString("mode", null)) {
             "tracker" -> selectTrackerMode()
             "control" -> selectControlMode()
@@ -62,6 +63,7 @@ class MainActivity : AppCompatActivity() {
         binding.startButton.visibility = View.VISIBLE
         binding.stopButton.visibility = View.VISIBLE
         binding.mapButton.visibility = View.GONE
+        binding.findHubButton.visibility = View.GONE
     }
 
     private fun selectControlMode() {
@@ -71,6 +73,7 @@ class MainActivity : AppCompatActivity() {
         binding.startButton.visibility = View.GONE
         binding.stopButton.visibility = View.GONE
         binding.mapButton.visibility = View.VISIBLE
+        binding.findHubButton.visibility = View.VISIBLE
         listenForCar()
     }
 
@@ -133,6 +136,16 @@ class MainActivity : AppCompatActivity() {
         }
         val uri = Uri.parse("geo:" + lat + "," + lon + "?q=" + lat + "," + lon + "(AutoGuardian)")
         startActivity(Intent(Intent.ACTION_VIEW, uri))
+    }
+
+    private fun openFindHub() {
+        val uri = Uri.parse("https://android.com/find")
+        val intent = Intent(Intent.ACTION_VIEW, uri)
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivity(intent)
+        } else {
+            Toast.makeText(this, "Nessun browser disponibile.", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun stopListening() {

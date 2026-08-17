@@ -35,5 +35,10 @@
         <Button android:id="@+id/mapButton" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:text="APRI POSIZIONE AUTO SULLA MAPPA"
             android:visibility="gone" android:layout_marginTop="20dp" />
+        <Button android:id="@+id/findHubButton" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="LOCALIZZA CON GOOGLE FIND HUB"
+            android:contentDescription="Apri Google Find Hub per localizzare il dispositivo"
+            android:visibility="gone" android:layout_marginTop="10dp"
+            android:layout_marginBottom="28dp" />
     </LinearLayout>
 </ScrollView>
