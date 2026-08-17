@@ -12,8 +12,8 @@ android {
         applicationId = "com.autoguardian.gpspro"
         minSdk = 26
         targetSdk = 35
-        versionCode = 6
-        versionName = "4.1.1"
+        versionCode = 7
+        versionName = "4.2.0"
     }
 
     buildFeatures { viewBinding = true }
