@@ -1,41 +1,34 @@
-# AutoGuardian GPS Pro — Debug Android 13+
+# AutoGuardian GPS Pro 4.0
 
-Versione pronta per la prima prova su un telefono Android 13.
+Versione consolidata per Android 13 e successivi, con lo stesso `applicationId` e lo stesso progetto Firebase.
 
-## La procedura più semplice
+## Funzioni incluse
 
-1. Crea su GitHub un repository pubblico chiamato `AutoGuardianGPS-Pro`.
-2. Estrai questo ZIP sul PC.
-3. Nel repository GitHub scegli **Add file → Upload files**.
-4. Trascina nella pagina **tutto il contenuto** della cartella `AutoGuardianGPS-Pro`.
-5. Premi **Commit changes**.
-6. GitHub avvierà automaticamente la compilazione.
-7. Quando la compilazione termina, nella pagina principale del repository apparirà **Releases**.
-8. Apri l'ultima release e scarica `AutoGuardianGPS-Pro-debug.apk`.
+- telefono nascosto: servizio GPS in primo piano con aggiornamento ogni 10–15 secondi
+- invio a Firebase di posizione, precisione, velocità, batteria e ultimo contatto
+- telefono di controllo: mappa interna aggiornata automaticamente
+- quattro comandi: Posizione auto, Attiva/Disattiva antifurto, Cronologia percorsi e Stato telefono nascosto
+- indicazione online/non aggiornato, batteria e data dell’ultimo aggiornamento
+- cronologia Firebase limitata automaticamente alle ultime 200 posizioni
+- Viewer web separato, senza permessi Android sul telefono di controllo
+- pulsante opzionale per aprire la posizione in Google Maps
 
-Non serve Android Studio e non serve avviare manualmente GitHub Actions.
+Viewer operativo:
+https://autoguardian-gps-pro.giovannitucci74.chatgpt.site/
 
-## Cosa fa questa build
+## Compilazione APK
 
-- Android 13+ (`minSdk 26`, `targetSdk 35`)
-- tracking GPS tramite Foreground Service
-- aggiornamento GPS circa ogni 15 secondi
-- ultima posizione salvata localmente
-- pulsante ATTIVA TRACKING / DISATTIVA
-- tentativo di ripristino del tracking dopo riavvio se era attivo
-- servizio `START_STICKY` per maggiore resilienza
+Il workflow GitHub Actions compila automaticamente la build Debug per ogni pull request verso `main`.
+L’artifact generato si chiama `AutoGuardian-GPS-Pro-Debug` e contiene `app-debug.apk`.
 
-## Prima prova sul telefono
+## Installazione
 
-1. Installa l'APK.
-2. Apri AutoGuardian GPS Pro.
-3. Concedi il permesso di localizzazione e, se richiesto, notifiche.
-4. Premi **ATTIVA TRACKING**.
-5. Esci all'aperto o posiziona il telefono dove riceve bene il GPS.
-6. Dopo 15–30 secondi premi **ULTIMA POSIZIONE**.
+1. Scaricare l’APK dall’artifact della build GitHub Actions.
+2. Installarlo sul telefono nascosto e selezionare **TELEFONO NASCOSTO NELL’AUTO**.
+3. Concedere posizione precisa, notifiche e autorizzazione al funzionamento in background.
+4. Premere **ATTIVA TRACKER**.
+5. Sul secondo telefono installare la stessa APK e selezionare **TELEFONO DI CONTROLLO**, oppure aprire il Viewer web.
 
-## Nota importante
+## Privacy e sicurezza
 
-Questa è la build Debug per verificare installazione e tracking locale. Geofence avanzato, allarme movimento remoto, mappa remota e fotografie evento non fanno ancora parte di questa build.
-
-Usare esclusivamente su un veicolo proprio o autorizzato e rispettando i permessi/indicatori privacy di Android.
+Usare esclusivamente su un veicolo proprio o autorizzato. Android mostra una notifica persistente mentre il servizio GPS è attivo. Il telefono bancario può usare il Viewer web senza installare l’APK e senza concedere permessi sensibili.

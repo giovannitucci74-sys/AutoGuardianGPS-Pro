@@ -7,33 +7,59 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center_horizontal"
-        android:padding="28dp">
+        android:padding="24dp">
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="AutoGuardian GPS Pro" android:textSize="28sp" android:textStyle="bold"
-            android:layout_marginTop="42dp" android:layout_marginBottom="12dp" />
+            android:text="AutoGuardian GPS Pro 4" android:textSize="27sp" android:textStyle="bold"
+            android:layout_marginTop="30dp" android:layout_marginBottom="12dp" />
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:text="Scegli il ruolo di questo telefono" android:textSize="17sp"
-            android:layout_marginBottom="24dp" />
+            android:layout_marginBottom="20dp" />
         <Button android:id="@+id/trackerModeButton" android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:text="TRACKER AUTO" />
+            android:layout_height="wrap_content" android:text="TELEFONO NASCOSTO NELL’AUTO" />
         <Button android:id="@+id/controlModeButton" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:text="TELEFONO DI CONTROLLO"
             android:layout_marginTop="10dp" />
         <TextView android:id="@+id/modeText" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:text="Modalità non selezionata"
             android:textStyle="bold" android:textSize="18sp" android:gravity="center"
-            android:layout_marginTop="28dp" />
+            android:layout_marginTop="22dp" />
         <TextView android:id="@+id/statusText" android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:text="Pronto" android:textSize="18sp"
-            android:gravity="center" android:padding="8dp" android:layout_marginTop="10dp" />
+            android:layout_height="wrap_content" android:text="Pronto" android:textSize="17sp"
+            android:gravity="center" android:padding="8dp" android:layout_marginTop="8dp" />
         <Button android:id="@+id/startButton" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:text="ATTIVA TRACKER"
-            android:visibility="gone" android:layout_marginTop="20dp" />
+            android:visibility="gone" android:layout_marginTop="16dp" />
         <Button android:id="@+id/stopButton" android:layout_width="match_parent"
             android:layout_height="wrap_content" android:text="DISATTIVA TRACKER"
             android:visibility="gone" android:layout_marginTop="8dp" />
+        <Button android:id="@+id/positionButton" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="POSIZIONE AUTO"
+            android:visibility="gone" android:layout_marginTop="14dp" />
+        <Button android:id="@+id/antitheftButton" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="ATTIVA / DISATTIVA ANTIFURTO"
+            android:visibility="gone" android:layout_marginTop="8dp" />
+        <Button android:id="@+id/geofenceButton" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="IMPOSTA ZONA SICURA (150 M)"
+            android:visibility="gone" android:layout_marginTop="8dp" />
+        <Button android:id="@+id/historyButton" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="CRONOLOGIA PERCORSI"
+            android:visibility="gone" android:layout_marginTop="8dp" />
+        <Button android:id="@+id/hiddenPhoneButton" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="STATO TELEFONO NASCOSTO"
+            android:visibility="gone" android:layout_marginTop="8dp" />
+        <WebView android:id="@+id/liveMap" android:layout_width="match_parent"
+            android:layout_height="360dp" android:visibility="gone"
+            android:layout_marginTop="16dp"
+            android:contentDescription="Mappa posizione auto aggiornata automaticamente" />
         <Button android:id="@+id/mapButton" android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:text="APRI POSIZIONE AUTO SULLA MAPPA"
-            android:visibility="gone" android:layout_marginTop="20dp" />
+            android:layout_height="wrap_content" android:text="APRI ANCHE IN GOOGLE MAPS"
+            android:visibility="gone" android:layout_marginTop="12dp" />
+        <Button android:id="@+id/findHubButton" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="LOCALIZZA CON GOOGLE FIND HUB"
+            android:contentDescription="Apri Google Find Hub per localizzare il dispositivo"
+            android:visibility="gone" android:layout_marginTop="8dp" />
+        <TextView android:id="@+id/historyText" android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="" android:textSize="14sp"
+            android:visibility="gone" android:padding="12dp" android:layout_marginTop="10dp" />
     </LinearLayout>
 </ScrollView>
